@@ -11,10 +11,16 @@ import Home from './components/Home';
 import Profile from './components/Profile';
 import Notifications from './components/Notifications';
 import DonationDetails from './components/DonationDetails';
+import io from 'socket.io-client';
+import Chat from './components/Chat';
+
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [selectedDoneeId, setSelectedDoneeId] = useState(null);
+
 
   const handleLogin = (userData) => {
     console.log('User logged in with data:', userData); // Debugging log
@@ -26,6 +32,7 @@ const App = () => {
     setUser(null);
     setIsAuthenticated(false);
   };
+
 
   return (
     <Router>
@@ -52,12 +59,24 @@ const App = () => {
         />
         <Route 
           path="/notifications" 
-          element={isAuthenticated ? <Notifications /> : <Navigate to="/login" />} 
+          element={isAuthenticated ? <Notifications notifications={notifications} /> : <Navigate to="/login" />} 
         />
-         <Route 
+
+        <Route 
           path="/donation/:donationId" 
-          element={<DonationDetails />} 
+          element={isAuthenticated ? <DonationDetails /> : <Navigate to="/login" />} 
         />
+        
+        <Route
+          path="/chat"
+          element={<Chat 
+          donorId={user?.id} 
+          doneeId={selectedDoneeId} 
+          notifications={notifications} 
+          setNotifications={setNotifications}
+    />
+  }
+/>
       </Routes>
     </Router>
   );

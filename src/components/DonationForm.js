@@ -13,6 +13,12 @@ const DonationForm = () => {
 
     // Get the JWT token from local storage
     const token = localStorage.getItem('token');
+    console.log("Client-side token:", token);
+    if (!token) {
+      console.error('No token found');
+      setMessage('No token found. Please log in again.');
+      return;
+    }
 
     try {
       const response = await axios.post('http://localhost:5000/api/donations/donate', 
@@ -28,7 +34,7 @@ const DonationForm = () => {
           }
         }
       );
-      console.log(response.data);
+
       console.log('Donation submitted:', response.data);
       setMessage('Donation submitted successfully!'); // Set success message
       // Clear form fields
@@ -38,7 +44,8 @@ const DonationForm = () => {
       setLocation('');
     } catch (error) {
       console.error('Error submitting donation:', error);
-      setMessage('Error submitting donation. Please try again.'); // Set error message
+      const errorMessage = error.response?.data?.msg || 'Error submitting donation. Please try again.';
+      setMessage(errorMessage); // Set error message based on server response
     }
   };
 

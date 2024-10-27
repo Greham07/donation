@@ -18,6 +18,9 @@ const Login = ({ onLogin }) => {
       // Make the API call to log in
       const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       
+      // Store the token in local storage
+      localStorage.setItem('token', response.data.token); // Store the JWT token
+
       // Extract user data from the response
       const userData = {
         email: response.data.email, // Assuming the response contains email

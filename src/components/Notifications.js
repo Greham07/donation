@@ -1,10 +1,14 @@
 import React from 'react';
 
-const Notifications = () => {
+const Notifications = ({ notifications }) => { // Accept notifications as a prop
   return (
     <div>
-      <h2>Notifications</h2>
-      {/* Render notifications here */}
+      <h3>Notifications</h3>
+      <ul>
+        {notifications.map((note, index) => (
+          <li key={index}>{`New message from ${note.sender}`}</li>
+        ))}
+      </ul>
     </div>
   );
 };
